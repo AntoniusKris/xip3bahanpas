@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>XI P3 Persiapan PAS</title>
+<style>
+    body {
+        background-color: #111;
+        color: white;
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 20px;
+    }
+
+    h1 {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .accordion {
+        background-color: #222;
+        color: white;
+        cursor: pointer;
+        padding: 15px;
+        width: 100%;
+        text-align: left;
+        border: none;
+        outline: none;
+        margin-top: 10px;
+        font-size: 18px;
+        font-weight: bold;
+        border-radius: 6px;
+    }
+
+    .accordion:hover {
+        opacity: 0.85;
+    }
+
+    .panel {
+        padding: 0 18px;
+        display: none;
+        background-color: #1a1a1a;
+        overflow: hidden;
+        border-radius: 0 0 6px 6px;
+        margin-bottom: 10px;
+    }
+
+    .link-button {
+        display: block;
+        width: 100%;
+        padding: 12px;
+        margin: 10px 0;
+        background-color: #333;
+        color: white;
+        text-align: center;
+        text-decoration: none;
+        border-radius: 6px;
+        font-size: 16px;
+    }
+
+    .link-button:hover {
+        background-color: #444;
+    }
+</style>
+</head>
+<body>
+
+<h1>My Link Categories</h1>
+
+<div id="container"></div>
+
+<script>
+// INSERT YOUR GOOGLE APPS SCRIPT WEB APP URL HERE:
+const API_URL = "https://script.google.com/macros/s/AKfycbzitOSvGcBQopF9pFaAiQW6WZ-T0d-g2wSa0A8tA6RMOdbEsET89-W8kZt9RK08udx6nQ/exec";
+
+// Generate stable color for each category
+function stringToColor(str) {
+    let hash = 0;
+    for (let i = 0; i < str.length; i++) {
+        hash = str.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    const hue = Math.abs(hash) % 360;
+    return `hsl(${hue}, 70%, 40%)`;
+}
+
+// Fetch data from Google Sheets
+async function loadData() {
+    const res = await fetch(API_URL);
+    const categories = await res.json();
+
+    const container = document.getElementById("container");
+
+    Object.keys(categories).forEach(cat => {
+        // Accordion button
+        const accordion = document.createElement("button");
+        accordion.className = "accordion";
+        accordion.style.backgroundColor = stringToColor(cat);
+        accordion.textContent = cat.toUpperCase();
+
+        // Panel
+        const panel = document.createElement("div");
+        panel.className = "panel";
+
+        categories[cat].forEach(item => {
+            const btn = document.createElement("a");
+            btn.className = "link-button";
+            btn.href = item.url;
+            btn.target = "_blank";
+            btn.textContent = item.name;
+            panel.appendChild(btn);
+        });
+
+        accordion.onclick = () => {
+            panel.style.display = panel.style.display === "block" ? "none" : "block";
+        };
+
+        container.appendChild(accordion);
+        container.appendChild(panel);
+    });
+}
+
+loadData();
+</script>
+
+</body>
+</html>
