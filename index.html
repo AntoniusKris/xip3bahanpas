@@ -2,76 +2,104 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1"> <!-- IMPORTANT FOR MOBILE -->
 <title>XI P3 Persiapan PAS</title>
+
 <style>
     body {
         background-color: #111;
         color: white;
         font-family: Arial, sans-serif;
         margin: 0;
-        padding: 20px;
+        padding: 15px;
     }
 
     h1 {
         text-align: center;
-        margin-bottom: 20px;
+        margin-bottom: 10px;
+        font-size: 1.8rem;
     }
 
+    p {
+        text-align: center;
+        font-size: 1rem;
+    }
+
+    /* Accordion */
     .accordion {
         background-color: #222;
         color: white;
         cursor: pointer;
-        padding: 15px;
+        padding: 16px;
         width: 100%;
         text-align: left;
         border: none;
         outline: none;
-        margin-top: 10px;
-        font-size: 18px;
+        margin-top: 12px;
+        font-size: 1.1rem;
         font-weight: bold;
-        border-radius: 6px;
+        border-radius: 8px;
+        transition: 0.2s;
     }
 
     .accordion:hover {
-        opacity: 0.85;
+        opacity: 0.9;
     }
 
+    /* Panel */
     .panel {
-        padding: 0 18px;
+        padding: 10px 12px;
         display: none;
         background-color: #1a1a1a;
         overflow: hidden;
-        border-radius: 0 0 6px 6px;
-        margin-bottom: 10px;
+        border-radius: 0 0 8px 8px;
+        margin-bottom: 8px;
     }
 
+    /* Link buttons */
     .link-button {
         display: block;
         width: 100%;
-        padding: 12px;
+        padding: 14px;
         margin: 10px 0;
         background-color: #333;
         color: white;
         text-align: center;
         text-decoration: none;
-        border-radius: 6px;
-        font-size: 16px;
+        border-radius: 8px;
+        font-size: 1rem;
     }
 
     .link-button:hover {
         background-color: #444;
     }
+
+    /* MOBILE FIXES */
+    @media (max-width: 600px) {
+        h1 {
+            font-size: 1.5rem;
+        }
+        .accordion {
+            font-size: 1rem;
+            padding: 14px;
+        }
+        .link-button {
+            font-size: 0.95rem;
+            padding: 12px;
+        }
+    }
 </style>
 </head>
+
 <body>
 
 <h1>XI P3 Persiapan PAS</h1>
-    <p>klik kategori di bawah ini untuk melihat materi</p>
+<p>klik kategori di bawah ini untuk melihat materi</p>
 
 <div id="container"></div>
 
 <script>
-// INSERT YOUR GOOGLE APPS SCRIPT WEB APP URL HERE:
+// your web app URL
 const API_URL = "https://script.google.com/macros/s/AKfycbzitOSvGcBQopF9pFaAiQW6WZ-T0d-g2wSa0A8tA6RMOdbEsET89-W8kZt9RK08udx6nQ/exec";
 
 // Generate stable color for each category
@@ -84,7 +112,7 @@ function stringToColor(str) {
     return `hsl(${hue}, 70%, 40%)`;
 }
 
-// Fetch data from Google Sheets
+// Fetch data
 async function loadData() {
     const res = await fetch(API_URL);
     const categories = await res.json();
@@ -92,13 +120,11 @@ async function loadData() {
     const container = document.getElementById("container");
 
     Object.keys(categories).forEach(cat => {
-        // Accordion button
         const accordion = document.createElement("button");
         accordion.className = "accordion";
         accordion.style.backgroundColor = stringToColor(cat);
         accordion.textContent = cat.toUpperCase();
 
-        // Panel
         const panel = document.createElement("div");
         panel.className = "panel";
 
